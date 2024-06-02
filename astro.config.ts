@@ -10,6 +10,7 @@ import { experimental_AstroContainer } from "astro/container";
 export default defineConfig({
   output: "server",
   adapter: adapter(),
+  srcDir: "./app/views",
   integrations: [
     {
       name: "aor:dev",
@@ -27,14 +28,17 @@ export default defineConfig({
 
             const { searchParams } = new URL(request.url);
             const stringifiedProps = searchParams.get("props");
-            let props = {};
+            const view = searchParams.get("view");
+            let props = { message: "Placeholder" };
             if (stringifiedProps) {
               props = JSON.parse(stringifiedProps);
             }
-            const page = await server.ssrLoadModule("/src/page.astro");
+            const page = await server.ssrLoadModule(
+              `./app/views/${view}.astro`
+            );
             const response = await container.renderToResponse(page.default, {
               request,
-              props: { message: "Hey there!" },
+              props,
             });
             writeResponse(response, res);
           });

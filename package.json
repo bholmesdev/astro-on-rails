@@ -3,7 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "build": "astro build"
+    "build": "astro build",
+    "dev": "astro dev"
   },
   "devDependencies": {
     "@types/bun": "latest"

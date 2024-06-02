@@ -1,0 +1,17 @@
+---
+import { ViewTransitions } from "astro:transitions";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <ViewTransitions />
+  </head>
+  <body>
+    <h1>{Astro.props.message}</h1>
+    <p>Rendered at {Date.now()}</p>
+  </body>
+</html>

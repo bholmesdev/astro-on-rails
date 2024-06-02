@@ -1,4 +1,5 @@
 import { experimental_AstroContainer } from "astro/container";
+// @ts-expect-error May not be built
 import * as pages from "./dist/server/all.mjs";
 
 const container = await experimental_AstroContainer.create();
