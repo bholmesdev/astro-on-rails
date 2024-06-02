@@ -116,6 +116,11 @@ GEM
     jbuilder (2.12.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+    libv8-node (21.7.2.0)
+    libv8-node (21.7.2.0-aarch64-linux)
+    libv8-node (21.7.2.0-arm64-darwin)
+    libv8-node (21.7.2.0-x86_64-darwin)
+    libv8-node (21.7.2.0-x86_64-linux)
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -127,6 +132,8 @@ GEM
     marcel (1.0.4)
     matrix (0.4.2)
     mini_mime (1.1.5)
+    mini_racer (0.12.0)
+      libv8-node (~> 21.7.2.0)
     minitest (5.23.1)
     msgpack (1.7.2)
     mutex_m (0.2.0)
@@ -140,6 +147,7 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
+    node-runner (1.2.0)
     nokogiri (1.16.5-aarch64-linux)
       racc (~> 1.4)
     nokogiri (1.16.5-arm-linux)
@@ -262,6 +270,8 @@ DEPENDENCIES
   debug
   importmap-rails
   jbuilder
+  mini_racer
+  node-runner (~> 1.2)
   puma (>= 5.0)
   rails (~> 7.1.3, >= 7.1.3.3)
   selenium-webdriver
@@ -276,4 +286,4 @@ RUBY VERSION
    ruby 3.3.0p0
 
 BUNDLED WITH
-   2.5.11
+   2.5.4
