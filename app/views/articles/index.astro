@@ -1,0 +1,26 @@
+---
+import Layout from "../Layout.astro";
+
+type Props = {
+  articles: Array<{
+    id: string;
+    title: string;
+  }>;
+};
+
+const { articles } = Astro.props;
+---
+
+<Layout>
+  <h1 class="text-3xl">Hello, Astro on Rails!</h1>
+
+  <ul>
+    {
+      articles.map((article) => (
+        <li>
+          <a href={`/articles/${article.id}`}>{article.title}</a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>

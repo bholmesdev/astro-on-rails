@@ -1,0 +1,26 @@
+---
+import Layout from "../Layout.astro";
+
+type Props = {
+  title: string;
+  body: string;
+};
+
+const { title, body } = Astro.props;
+---
+
+<Layout>
+  <h1>{title}</h1>
+
+  <Fragment set:html={body} />
+</Layout>
+
+<style>
+  h1 {
+    color: red;
+  }
+</style>
+
+<script>
+  console.log("testing");
+</script>
