@@ -29,18 +29,26 @@ export default defineConfig({
             const { searchParams } = new URL(request.url);
             const stringifiedProps = searchParams.get("props");
             const view = searchParams.get("view");
+            if (!view) {
+              return writeResponse(new Response(null, { status: 400 }), res);
+            }
             let props = { message: "Placeholder" };
             if (stringifiedProps) {
               props = JSON.parse(stringifiedProps);
             }
-            const page = await server.ssrLoadModule(
-              `./app/views/${view}.astro`
-            );
-            const response = await container.renderToResponse(page.default, {
-              request,
-              props,
-            });
-            writeResponse(response, res);
+            try {
+              const page = await server.ssrLoadModule(
+                `./app/views/${view}.astro`
+              );
+              const response = await container.renderToResponse(page.default, {
+                request,
+                props,
+              });
+              writeResponse(response, res);
+            } catch (e) {
+              const message = e instanceof Error ? e.message : `${e}`;
+              writeResponse(new Response(message, { status: 400 }), res);
+            }
           });
         },
       },
