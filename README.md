@@ -1,24 +1,23 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This creates a Ruby on Rails project using Astro for views.
 
-Things you may want to cover:
+## Installation
 
-* Ruby version
+First, follow the [Rails installation guide](https://guides.rubyonrails.org/getting_started.html#creating-a-new-rails-project-installing-rails) to ensure you have compatible versions of Ruby and Rails installed.
 
-* System dependencies
+Once Ruby is set up, install packages / gems:
 
-* Configuration
+```bash
+bundle install
+```
 
-* Database creation
+Next, install JavaScript dependencies using the [pnpm](https://pnpm.io/installation) command:
 
-* Database initialization
+```bash
+pnpm install
+```
 
-* How to run the test suite
+## Start the development server
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Run `pnpm dev` in your terminal. This will start the Astro dev server at `http://localhost:4321`, and a Ruby on Rails server in the background. Be sure to open `http://localhost:4321` and _not_ the Rails server.
