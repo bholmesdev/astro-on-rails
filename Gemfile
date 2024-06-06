@@ -28,6 +28,8 @@ gem "jbuilder"
 
 gem "mini_racer"
 
+gem 'rack-proxy', '~> 0.7.7'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
 

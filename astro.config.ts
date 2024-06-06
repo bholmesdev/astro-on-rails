@@ -5,20 +5,24 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const VIRTUAL_MOD_ID = "aor:views";
-const RESOLVED_VIRTUAL_MOD_ID = "\0" + VIRTUAL_MOD_ID;
-
 // https://astro.build/config
 export default defineConfig({
   output: "server",
   adapter: node({
     mode: "standalone",
   }),
+  base: "/_astro",
   srcDir: "./app/views",
   integrations: [
     {
       name: "aor:views",
       hooks: {
+        async "astro:server:setup"({ server }) {
+          server.middlewares.use(async (req, res, next) => {
+            console.log("middleware", req.url);
+            next();
+          });
+        },
         async "astro:config:setup"() {
           const viewsDir = new URL("app/views/", import.meta.url);
           const pagesDir = new URL("pages/", viewsDir);
