@@ -20,6 +20,6 @@ export const ALL: APIRoute = async (ctx) => {
     "/views/" + view.replace("index", ""),
     ctx.url.origin
   );
-  ctx.locals.rubyProps = props;
+  (ctx.locals as any).rubyProps = props;
   return ctx.rewrite(rewriteUrl);
 };

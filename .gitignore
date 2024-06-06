@@ -35,7 +35,7 @@
 /config/master.key
 
 # Ignore generated Astro pages
-app/views/pages/views 
+generated/
 
 # npm
 node_modules/

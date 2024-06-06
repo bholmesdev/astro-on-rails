@@ -1,9 +1,10 @@
 import { defineConfig } from "astro/config";
 import node from "@astrojs/node";
 import glob from "fast-glob";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { existsSync } from "node:fs";
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,24 +12,26 @@ export default defineConfig({
   adapter: node({
     mode: "standalone",
   }),
-  srcDir: "./app/views",
+  srcDir: "generated",
   integrations: [
     {
       name: "aor:views",
       hooks: {
         async "astro:config:setup"() {
-          const viewsDir = new URL("app/views/", import.meta.url);
-          const pagesDir = new URL("pages/views/", viewsDir);
+          const referenceDir = new URL("app/views/", import.meta.url);
+          const generatedDir = new URL("generated/", import.meta.url);
+          const pagesDir = new URL("pages/", generatedDir);
+          const viewsDir = new URL("views/", pagesDir);
           const views = await glob(["**/*.astro", "!pages/**/*.astro"], {
-            cwd: fileURLToPath(viewsDir),
+            cwd: fileURLToPath(referenceDir),
             onlyFiles: true,
           });
-          await mkdir(pagesDir, { recursive: true });
+          await mkdir(viewsDir, { recursive: true });
           for (const view of views) {
-            const pageUrl = new URL(view, pagesDir);
+            const viewUrl = new URL(view, viewsDir);
             const viewRelativeToPage = path.relative(
-              path.dirname(fileURLToPath(pageUrl)),
-              fileURLToPath(new URL(view, viewsDir))
+              path.dirname(fileURLToPath(viewUrl)),
+              fileURLToPath(new URL(view, referenceDir))
             );
             // TODO: map props and slots
             const pageContent = `---
@@ -38,11 +41,30 @@ const props = Astro.locals.rubyProps ?? {};
 
 <View {...props} />`;
 
-            await mkdir(path.dirname(fileURLToPath(pageUrl)), {
+            await mkdir(path.dirname(fileURLToPath(viewUrl)), {
               recursive: true,
             });
-            await writeFile(pageUrl, pageContent);
+            await writeFile(viewUrl, pageContent);
           }
+          const envdtsUrl = new URL("env.d.ts", referenceDir);
+
+          if (!existsSync(envdtsUrl)) {
+            const generatedEnvdtsUrl = new URL("env.d.ts", generatedDir);
+            const relativePath = path.relative(
+              path.dirname(fileURLToPath(envdtsUrl)),
+              fileURLToPath(generatedEnvdtsUrl)
+            );
+            await writeFile(
+              envdtsUrl,
+              `/// <reference path=${JSON.stringify(relativePath)} />`
+            );
+          }
+
+          // TODO: injectRoute()
+          await writeFile(
+            new URL("[...app].ts", pagesDir),
+            await readFile(new URL("[...app].ts", import.meta.url), "utf-8")
+          );
         },
       },
     },
