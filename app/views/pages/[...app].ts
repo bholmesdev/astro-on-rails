@@ -4,10 +4,6 @@ export const ALL: APIRoute = async (ctx) => {
   const rubyResponse = await fetch(
     new URL(ctx.url.pathname, "http://localhost:3000")
   );
-
-  if (!rubyResponse.ok) {
-    return rubyResponse;
-  }
   const view = rubyResponse.headers.get("X-Astro-View");
   if (!view) {
     return rubyResponse;
