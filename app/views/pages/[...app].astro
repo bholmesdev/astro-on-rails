@@ -1,0 +1,19 @@
+---
+const rubyResponse = await fetch(
+  new URL(Astro.url.pathname, "http://localhost:3000")
+);
+
+if (!rubyResponse.ok) {
+  return rubyResponse;
+}
+const { view, ...props } = await rubyResponse.json();
+
+if (view) {
+  const rewriteUrl = new URL(
+    "/views/" + view.replace("index", ""),
+    Astro.url.origin
+  );
+  Astro.response.headers.set("X-Props", JSON.stringify(props));
+  return Astro.rewrite(rewriteUrl);
+}
+---

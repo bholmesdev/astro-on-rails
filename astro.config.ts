@@ -11,21 +11,14 @@ export default defineConfig({
   adapter: node({
     mode: "standalone",
   }),
-  base: "/_astro",
   srcDir: "./app/views",
   integrations: [
     {
       name: "aor:views",
       hooks: {
-        async "astro:server:setup"({ server }) {
-          server.middlewares.use(async (req, res, next) => {
-            console.log("middleware", req.url);
-            next();
-          });
-        },
         async "astro:config:setup"() {
           const viewsDir = new URL("app/views/", import.meta.url);
-          const pagesDir = new URL("pages/", viewsDir);
+          const pagesDir = new URL("pages/views/", viewsDir);
           const views = await glob(["**/*.astro", "!pages/**/*.astro"], {
             cwd: fileURLToPath(viewsDir),
             onlyFiles: true,
@@ -40,8 +33,7 @@ export default defineConfig({
             // TODO: map props and slots
             const pageContent = `---
 import View from ${JSON.stringify(viewRelativeToPage)};
-const { searchParams } = Astro.url;
-const stringifiedProps = searchParams.get("props");
+const stringifiedProps = Astro.response.headers.get("X-Props");
 let props: any = {};
 if (stringifiedProps) {
   props = JSON.parse(stringifiedProps);

@@ -4,25 +4,19 @@ require 'uri'
 class ArticlesController < ApplicationController
   def index
     articles = Article.all
-    props = { :articles => articles }
-    view = "articles/index"
-    uri = URI.parse("http://localhost:4321/_astro/articles?props=#{props.to_json}")
-    puts uri
-    res = Net::HTTP.get_response uri
+    props = { :articles => articles, :view => "articles/index" }
 
-    puts res.body
-
-    render html: res.body.html_safe
+    render json: props
   end
 
   def show
     article = Article.find(params[:id])
-    props = article
-    view = "articles/show"
+    props = {
+      :title => article.title,
+      :body => article.body,
+      :view => "articles/show"
+    }
 
-    uri = URI.parse("http://localhost:4321/_astro/articles/show?props=#{props.to_json}")
-    res = Net::HTTP.get_response uri
-
-    render html: res.body.html_safe
+    render json: props
   end
 end
