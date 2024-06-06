@@ -13,7 +13,7 @@ if (view) {
     "/views/" + view.replace("index", ""),
     Astro.url.origin
   );
-  Astro.response.headers.set("X-Props", JSON.stringify(props));
+  Astro.locals.rubyProps = props;
   return Astro.rewrite(rewriteUrl);
 }
 ---

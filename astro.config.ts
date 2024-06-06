@@ -33,11 +33,7 @@ export default defineConfig({
             // TODO: map props and slots
             const pageContent = `---
 import View from ${JSON.stringify(viewRelativeToPage)};
-const stringifiedProps = Astro.response.headers.get("X-Props");
-let props: any = {};
-if (stringifiedProps) {
-  props = JSON.parse(stringifiedProps);
-}
+const props = Astro.locals.rubyProps ?? {};
 ---
 
 <View {...props} />`;
